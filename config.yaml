@@ -1,0 +1,75 @@
+gpu_id: '0'
+log_wandb: False
+seed: 2024
+
+# ssd4rec settings
+hidden_size: 256                # (int) Number of features in the hidden state. 
+loss_type: 'CE'                 # (str) Type of loss function. Range in ['BPR', 'CE'].
+
+# SSD Block settings
+d_state: 64                     # (int) SSM state expansion factor
+d_conv: 4                       # (int) Local convolution width
+expand: 2                       # (int) Block expansion factor
+headdim: 16                     # hidden_size*expand/headdim=multiple of 8
+
+# dataset settings
+ml-1m setting:
+dataset: ml-1m
+MAX_ITEM_LIST_LENGTH: 200       # 200 for MovieLens-1M
+dropout_prob: 0.2               # (float) Dropout rate.
+norm_embedding: True
+beta: 0.1
+maskratio: 0.1
+num_layers: 2                   # (int) Number of Bi-SSD layers.
+
+# # amazon-beauty setting:
+# dataset: amazon-beauty
+# MAX_ITEM_LIST_LENGTH: 50        # 50 for amazon-beauty datasets
+# dropout_prob: 0.4               # (float) Dropout rate.
+# norm_embedding: False
+# beta: 0.1
+# maskratio: 0.2
+# num_layers: 1                   # (int) Number of Bi-SSD layers.
+
+# # amazon-video-games setting:
+# dataset: amazon-video-games
+# MAX_ITEM_LIST_LENGTH: 50        # 50 for amazon-video-games datasets
+# dropout_prob: 0.4               # (float) Dropout rate.
+# norm_embedding: False
+# beta: 0.1
+# maskratio: 0.1
+# num_layers: 1                   # (int) Number of Bi-SSD layers.
+
+# kuairand setting
+# dataset: kuairand
+# MAX_ITEM_LIST_LENGTH: 50      # 50 for kuairand datasets
+# dropout_prob: 0.2               # (float) Dropout rate.
+# norm_embedding: True
+# beta: 0.1
+# maskratio: 0.2
+# num_layers: 2                   # (int) Number of Bi-SSD layers.
+
+USER_ID_FIELD: user_id
+ITEM_ID_FIELD: item_id
+load_col:
+    inter: [user_id, item_id, timestamp]
+
+user_inter_num_interval: "[5,inf)"
+item_inter_num_interval: "[5,inf)"
+
+# training settings
+var_len: True
+epochs: 300
+train_batch_size: 1024
+learner: adam
+learning_rate: 0.001
+eval_step: 1
+stopping_step: 10
+train_neg_sample_args: ~ 
+
+# evalution settings
+metrics: ['NDCG', 'MRR', 'Hit']
+valid_metric: NDCG@10
+eval_batch_size: 2048
+weight_decay: 0.0
+topk: [10, 20]
